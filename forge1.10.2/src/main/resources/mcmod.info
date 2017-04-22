@@ -1,0 +1,30 @@
+[
+{
+  "modid": "element",
+  "name": "Element",
+  "description": "脑洞大开",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Unexistedy",""绝"],
+  "credits": "未知",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+},
+{
+  "modid": "the_reality",
+  "name": "The Reality",
+  "description": "有生之年",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Unexistedy"],
+  "credits": "你猜",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
