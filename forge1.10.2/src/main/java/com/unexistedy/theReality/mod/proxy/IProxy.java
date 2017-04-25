@@ -1,4 +1,4 @@
-package com.unexistedy.element.mod.proxy;
+package com.unexistedy.theReality.mod.proxy;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

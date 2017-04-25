@@ -1,9 +1,9 @@
-package com.unexistedy.element.mod.proxy;
+package com.unexistedy.theReality.mod.proxy;
 
-import com.unexistedy.element.mod.common.configuration.ConfigHandler;
-import com.unexistedy.element.mod.common.event.EventHandler;
-import com.unexistedy.element.mod.utility.LogHelper;
-import com.unexistedy.element.mod.utility.Translator;
+import com.unexistedy.theReality.mod.common.configuration.ConfigHandler;
+import com.unexistedy.theReality.mod.common.event.EventHandler;
+import com.unexistedy.theReality.mod.utility.LogHelper;
+import com.unexistedy.theReality.mod.utility.Translator;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;

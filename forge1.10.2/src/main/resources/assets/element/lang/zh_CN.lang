@@ -1,0 +1,15 @@
+language.code=zh_CN
+element.name=元素
+element.config.folder=元素
+element.config.configSystem.file=系统设置.cfg
+element.config.configSystem.systemLanguage.name=系统语言
+element.config.configSystem.systemLanguage.category=系统设置
+element.config.configSystem.systemLanguage.comment=只用于服务端.修改Logger和配置文件的语言.
+element.config.configSystem.showTrace.name=显示追踪
+element.config.configSystem.showTrace.category=系统设置
+element.config.configSystem.showTrace.comment=是否显示Logger的追踪. 正常情况下应该为否
+element.log.langFileExistWarn=语言文件 %s 已经存在.将会被覆盖
+element.log.fileCanNotDeleteWarn=文件 %s 无法被删除.将忽略.
+element.log.logHelperLoadedInfo=Logger加载完成.
+element.log.configHandlerLoadedInfo=配置文件加载完成.
+element.log.translatorLoadedInfo=翻译器已在 %s 端加载.

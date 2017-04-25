@@ -1,26 +1,29 @@
-package com.unexistedy.element;
+package com.unexistedy.theReality;
 
-import com.unexistedy.element.mod.proxy.IProxy;
-import com.unexistedy.element.mod.reference.Reference;
+import com.unexistedy.theReality.mod.proxy.IProxy;
+import com.unexistedy.theReality.mod.reference.Reference;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import java.sql.Ref;
+
 /**
  * Created by Unexistedy on 2017/4/24.
  */
 @Mod(modid = Reference.ID,useMetadata = true,guiFactory = Reference.GuiFactory)
-public class Element {
+public class TheReality {
     @Mod.Instance(Reference.ID)
-    public static Element instance;
+    public static TheReality instance;
     @SidedProxy(modId = Reference.ID,clientSide = Reference.ClientProxy,serverSide = Reference.ServerClient)
     public static IProxy proxy;
     @Mod.EventHandler
     public void preInitialize(FMLPreInitializationEvent event){
         new Reference(event);
         proxy.preInitialize(event);
+        event.getModLog();
     }
     @Mod.EventHandler
     public void initialize(FMLInitializationEvent event){

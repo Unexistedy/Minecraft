@@ -1,0 +1,15 @@
+language.code=en_US
+element.name=Element
+element.config.folder=Element
+element.config.configSystem.file=System.cfg
+element.config.configSystem.systemLanguage.name= System language
+element.config.configSystem.systemLanguage.category=System Setting
+element.config.configSystem.systemLanguage.comment=Only applied on server side.Change config and logger language.
+element.config.configSystem.showTrace.name= Show trace
+element.config.configSystem.showTrace.category=System Setting
+element.config.configSystem.showTrace.comment=Whether the logger will show the trace of methods.Should be false.
+element.log.langFileExistWarn=Language file %s already existed.Will be override.
+element.log.fileCanNotDeleteWarn=File %s can not be deleted. Will be ignored.
+element.log.logHelperLoadedInfo=Logger loaded.
+element.log.configHandlerLoadedInfo=Configuration loaded.
+element.log.translatorLoadedInfo=Translator has loaded on %s side.
