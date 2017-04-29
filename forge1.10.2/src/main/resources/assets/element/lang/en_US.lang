@@ -1,4 +1,5 @@
 language.code=en_US
+itemGroup.element=Element
 element.name=Element
 element.config.folder=Element
 element.config.configSystem.file=System.cfg
@@ -11,5 +12,8 @@ element.config.configSystem.showTrace.comment=Whether the logger will show the t
 element.log.langFileExistWarn=Language file %s already existed.Will be override.
 element.log.fileCanNotDeleteWarn=File %s can not be deleted. Will be ignored.
 element.log.logHelperLoadedInfo=Logger loaded.
+element.log.logHelperReloadedInfo=Logger reloaded.
 element.log.configHandlerLoadedInfo=Configuration loaded.
+element.log.configHandlerReloadedInfo=Configuration reloaded.
 element.log.translatorLoadedInfo=Translator has loaded on %s side.
+element.log.translatorReloadedInfo=Translator reloaded.

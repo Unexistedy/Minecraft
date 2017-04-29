@@ -75,6 +75,7 @@ public class ConfigHandler extends HandlerBase implements TranslatorLoadedListen
                 LogHelper.warn(Keys.Log.FileCanNotDeleteWarn,currentFolder.getName());
             }
             currentFolder=new File(Reference.getConfigDirectory(),Translator.get(Keys.Config.ConfigFolder));
+            LogHelper.info(Keys.Log.ConfigHandlerReloadedInfo);
         }
     }
     @SubscribeEvent

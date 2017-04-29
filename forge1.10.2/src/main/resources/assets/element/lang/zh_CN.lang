@@ -1,5 +1,6 @@
 language.code=zh_CN
 element.name=元素
+itemGroup.element=元素
 element.config.folder=元素
 element.config.configSystem.file=系统设置.cfg
 element.config.configSystem.systemLanguage.name=系统语言
@@ -11,5 +12,8 @@ element.config.configSystem.showTrace.comment=是否显示Logger的追踪. 正�
 element.log.langFileExistWarn=语言文件 %s 已经存在.将会被覆盖
 element.log.fileCanNotDeleteWarn=文件 %s 无法被删除.将忽略.
 element.log.logHelperLoadedInfo=Logger加载完成.
+element.log.logHelperReloadedInfo=Logger已重新加载.
 element.log.configHandlerLoadedInfo=配置文件加载完成.
+element.log.configHandlerReloadedInfo=配置文件已重新加载.
 element.log.translatorLoadedInfo=翻译器已在 %s 端加载.
+the_reality.log.translatorReloadedInfo=翻译器已重新加载.

@@ -25,7 +25,7 @@ public class LogHelper extends Base implements TranslatorLoadedListener{
     private void init(){
         if (logger!=null)
             logger.exit();
-        String name=Translator.get(Keys.Name);
+        String name=Translator.getName();
         if (Translator.getSTATE().isTranslated())
             logger= LogManager.getLogger(name);
         else
@@ -35,8 +35,8 @@ public class LogHelper extends Base implements TranslatorLoadedListener{
         if (logger==null)
             new LogHelper();
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()){
-            logger.log(level, "["+Reference.Name+"]:"+new Throwable().getStackTrace()[2]);
-            logger.log(level, "["+Reference.Name+"]:"+Translator.get(key, parameters));
+            logger.log(level, "["+Translator.getName()+"]:"+new Throwable().getStackTrace()[2]);
+            logger.log(level, "["+Translator.getName()+"]:"+Translator.get(key, parameters));
         }
         else {
             logger.log(level, new Throwable().getStackTrace()[2]);
@@ -56,5 +56,6 @@ public class LogHelper extends Base implements TranslatorLoadedListener{
     @Override
     public void onTranslatorLoaded() {
         init();
+        info(Keys.Log.LogHelperReloadedInfo);
     }
 }

@@ -1,12 +1,15 @@
 package com.unexistedy.element.mod.utility;
 
 import com.unexistedy.element.mod.common.classes.HandlerBase;
+import com.unexistedy.element.mod.common.event.event.LanguageChangedEvent;
 import com.unexistedy.element.mod.common.event.listener.TranslatorLoadedListener;
 import com.unexistedy.element.mod.reference.Keys;
 import com.unexistedy.element.mod.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.Map;
 /**
  * Created by Unexistedy on 2017/4/25.
  */
+@Mod.EventBusSubscriber
 public class Translator extends HandlerBase {
     public static String get(String key,Object...parameters){
     if (key != null){
@@ -64,6 +68,9 @@ public class Translator extends HandlerBase {
         else
             STATE=State.PartlyTranslated;
         return (String[])results.toArray();
+    }
+    public static String getName(){
+        return get(Keys.Name);
     }
     public static String getCurrentCode(){
         if (instance!=null)
@@ -154,16 +161,20 @@ public class Translator extends HandlerBase {
     }
     @Override
     public void load(){
+        Boolean isreload=isReady();
         loadCommon();
         if (FMLCommonHandler.instance().getEffectiveSide().isClient())
             loadClient();
         else
             loadServer();
-        setReady();
         for (TranslatorLoadedListener entry:ListenerList){
             entry.onTranslatorLoaded();
         }
-        LogHelper.info(Keys.Log.TranslatorLoadedInfo,FMLCommonHandler.instance().getEffectiveSide().toString());
+        if (!isreload)
+            LogHelper.info(Keys.Log.TranslatorLoadedInfo,FMLCommonHandler.instance().getEffectiveSide().toString());
+        else
+            LogHelper.info(Keys.Log.TranslatorReloadedInfo);
+        setReady();
     }
 
     private String searchFile(File entry, String languageCode) {
@@ -255,6 +266,10 @@ public class Translator extends HandlerBase {
         }
     }
     private static List<TranslatorLoadedListener> ListenerList=null;
-
+    @SubscribeEvent
+    public static void onLanguageChangedEvent(LanguageChangedEvent event){
+        instance.currentCode=event.getCurrentCode();
+        instance.load();
+    }
 
 }

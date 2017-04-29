@@ -34,7 +34,10 @@ public class Keys {
         public static final String LangFileExistWarn=LogTag+"langFileExistWarn";
         public static final String FileCanNotDeleteWarn=LogTag+"fileCanNotDeleteWarn";
         public static final String LogHelperLoadedInfo=LogTag+"logHelperLoadedInfo";
+        public static final String LogHelperReloadedInfo=LogTag+"logHelperReloadedInfo";
         public static final String ConfigHandlerLoadedInfo=LogTag+"configHandlerLoadedInfo";
+        public static final String ConfigHandlerReloadedInfo=LogTag+"configHandlerReloadedInfo";
         public static final String TranslatorLoadedInfo=LogTag+"translatorLoadedInfo";
+        public static final String TranslatorReloadedInfo=LogTag+"translatorReloadedInfo";
     }
 }
