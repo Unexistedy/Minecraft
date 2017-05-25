@@ -1,19 +1,27 @@
 language.code=zh_CN
+language.name=简体中文
+
 element.name=元素
-itemGroup.element=元素
-element.config.folder=元素
-element.config.configSystem.file=系统设置.cfg
-element.config.configSystem.systemLanguage.name=系统语言
-element.config.configSystem.systemLanguage.category=系统设置
-element.config.configSystem.systemLanguage.comment=只用于服务端.修改Logger和配置文件的语言.
-element.config.configSystem.showTrace.name=显示追踪
-element.config.configSystem.showTrace.category=系统设置
-element.config.configSystem.showTrace.comment=是否显示Logger的追踪. 正常情况下应该为否
-element.log.langFileExistWarn=语言文件 %s 已经存在.将会被覆盖
-element.log.fileCanNotDeleteWarn=文件 %s 无法被删除.将忽略.
-element.log.logHelperLoadedInfo=Logger加载完成.
-element.log.logHelperReloadedInfo=Logger已重新加载.
-element.log.configHandlerLoadedInfo=配置文件加载完成.
-element.log.configHandlerReloadedInfo=配置文件已重新加载.
-element.log.translatorLoadedInfo=翻译器已在 %s 端加载.
-the_reality.log.translatorReloadedInfo=翻译器已重新加载.
+
+element.config.holder=元素
+
+element.config.system.file=系统设置.cfg
+element.config.system.category.language=基础设置
+element.config.system.name.language=系统语言
+element.config.system.comment.language=用于服务端日志的语言设置.
+
+element.log.info.setLogger=设置日志为 Logger[%s].
+element.log.info.translatorLoaded=翻译器已在 %s 端加载.
+element.log.info.translatorLanguageChangedEvent=语言被更改!语言代码将设置为 %s.
+element.log.info.listenerLanguageChanged=检测到客户端语言更改.
+element.log.info.configSaved=配置文件 %s 已被保存.
+element.log.info.configReloading=配置文件 %s 正在重载.
+element.log.info.configAssigned=配置文件 %s 被设置为当前文件.
+element.log.info.configLoading=配置文件 %s 正在加载.
+element.log.info.configLoaded=配置文件 %s 加载完成.
+element.log.info.configInjecting=设置数据中.
+element.log.info.configInjectComplete=数据设置完成.
+element.log.info.configHandlerReloading=正在重载配置文件管理器.
+element.log.info.configHandlerReloaded=配置文件管理器已重载.
+
+element.log.warn.translatorLoaded=翻译器未能正确在 %s 端加载.

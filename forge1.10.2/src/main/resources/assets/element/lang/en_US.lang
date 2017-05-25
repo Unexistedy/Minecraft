@@ -1,19 +1,27 @@
 language.code=en_US
-itemGroup.element=Element
+language.name=English
+
 element.name=Element
-element.config.folder=Element
-element.config.configSystem.file=System.cfg
-element.config.configSystem.systemLanguage.name= System language
-element.config.configSystem.systemLanguage.category=System Setting
-element.config.configSystem.systemLanguage.comment=Only applied on server side.Change config and logger language.
-element.config.configSystem.showTrace.name= Show trace
-element.config.configSystem.showTrace.category=System Setting
-element.config.configSystem.showTrace.comment=Whether the logger will show the trace of methods.Should be false.
-element.log.langFileExistWarn=Language file %s already existed.Will be override.
-element.log.fileCanNotDeleteWarn=File %s can not be deleted. Will be ignored.
-element.log.logHelperLoadedInfo=Logger loaded.
-element.log.logHelperReloadedInfo=Logger reloaded.
-element.log.configHandlerLoadedInfo=Configuration loaded.
-element.log.configHandlerReloadedInfo=Configuration reloaded.
-element.log.translatorLoadedInfo=Translator has loaded on %s side.
-element.log.translatorReloadedInfo=Translator reloaded.
+
+element.config.holder=Element
+
+element.config.system.file=System.cfg
+element.config.system.category.language=Basic Setting
+element.config.system.name.language=System Language
+element.config.system.comment.language=Language setting for logger on server side.
+
+element.log.info.setLogger=Setting logger to Logger[%s].
+element.log.info.translatorLoaded=Translator loaded on %s side.
+element.log.info.translatorLanguageChangedEvent=Language changed! Language code will be set to %s.
+element.log.info.listenerLanguageChanged=Detected language changed event on Client.
+element.log.info.configSaved=Config %s has been saved.
+element.log.info.configReloading=Config %s is reloading.
+element.log.info.configAssigned=Config %s has been assigned to this configuration.
+element.log.info.configLoading=Config %s is loading.
+element.log.info.configLoaded=Config %s loaded.
+element.log.info.configInjecting=Injecting values.
+element.log.info.configInjectComplete=Inject complete.
+element.log.info.configHandlerReloading=Reloading ConfigHandler.
+element.log.info.configHandlerReloaded=ConfigHandler reload complete.
+
+element.log.warn.translatorLoaded=Translator is not correctly loaded on %s side.

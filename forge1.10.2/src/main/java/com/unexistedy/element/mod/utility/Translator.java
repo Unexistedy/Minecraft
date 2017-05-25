@@ -1,275 +1,278 @@
 package com.unexistedy.element.mod.utility;
 
-import com.unexistedy.element.mod.common.classes.HandlerBase;
-import com.unexistedy.element.mod.common.event.event.LanguageChangedEvent;
-import com.unexistedy.element.mod.common.event.listener.TranslatorLoadedListener;
-import com.unexistedy.element.mod.reference.Keys;
+import com.unexistedy.element.mod.proxy.common.events.events.LanguageChangedEvent;
+import com.unexistedy.element.mod.proxy.common.events.events.TranslatorLoadedEvent;
+import com.unexistedy.element.mod.misc.Stage;
+import com.unexistedy.element.mod.reference.Lang;
+import com.unexistedy.element.mod.reference.Log;
 import com.unexistedy.element.mod.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Unexistedy on 2017/4/25.
- */
 @Mod.EventBusSubscriber
-public class Translator extends HandlerBase {
+public class Translator {
+    public static final String DefaultLanguage="en_US";
+    private static final String FileEnd=".lang";
+    private static Translator instance;
+    private static Stage stage=Stage.Null;
+
+    private Side side;
+    private String CurrentLanguage;
+    private Map<String,File> FileMap;
+    private Map<String,String> LangMap;
+    private Results Result=Results.Null;
+
     public static String get(String key,Object...parameters){
-    if (key != null){
-        if (instance!=null&&instance.isReady()) {
-            STATE = State.Translated;
-            if (FMLCommonHandler.instance().getEffectiveSide().isClient() && I18n.hasKey(key))
-                return I18n.format(key, parameters);
-            else if (LanguageMap.containsKey(key))
-                return String.format(LanguageMap.get(key), parameters);
-            STATE = State.NotTranslated;
-            return String.format(key, parameters);
-        } else {
-            STATE = State.Default;
+        getInstance().Result=Results.Translated;
+        if (getInstance().side.isClient()&& I18n.hasKey(key))
+            return I18n.format(key, parameters);
+        else if (getInstance().side.isServer()&&getInstance().LangMap!=null&&getInstance().LangMap.containsKey(key))
+            return String.format(getInstance().LangMap.get(key),parameters);
+        else {
+            getInstance().Result=Results.NotTranslated;
             return String.format(key, parameters);
         }
     }
-    else{
-        STATE = State.Error;
-        return "Null";
-    }
-}
     public static String[] get(String[] keys){
-        Boolean allTranslated=true;
-        Boolean allIgnored=true;
-        Boolean error=false;
-        List<String> results=new ArrayList<String>();
+        List<String> values =new ArrayList<String>();
+        Boolean notTranslated=true;
         for (String entry:keys){
-            results.add(get(entry));
-            if (STATE.equals(State.Translated))
-                allIgnored=false;
-            else {
-                allTranslated = false;
-                if (STATE.equals(State.Error))
-                    error=true;
-            }
+            values.add(get(entry));
+            if (getInstance().Result.isTranslated())
+                notTranslated=false;
         }
-        if (error)
-            STATE=State.Error;
-        else if (!instance.isReady())
-            STATE=State.Default;
-        else if (allTranslated)
-            STATE=State.Translated;
-        else if (allIgnored)
-            STATE=State.NotTranslated;
+        if (notTranslated)
+            getInstance().Result=Results.NotTranslated;
         else
-            STATE=State.PartlyTranslated;
-        return (String[])results.toArray();
+            getInstance().Result=Results.Translated;
+        return values.toArray(new String[values.size()]);
     }
-    public static String getName(){
-        return get(Keys.Name);
-    }
-    public static String getCurrentCode(){
-        if (instance!=null)
-            return instance.currentCode;
-        else
-            return null;
-    }
-    public static void setCode(String codeIn){
+    public static Results getResults(){
         if (instance==null)
-            new Translator();
-        if (codeIn!=null) {
-            instance.currentCode = codeIn;
-            instance.load();
-        }
+            return Results.Null;
+        else
+            return getInstance().Result;
     }
-    public static State getSTATE() {
-        return STATE;
+    public static Stage getStage() {
+        return stage;
     }
-    public static Translator getInstance() {
-        return instance!=null?instance:(new Translator()).instance;
+    public static String getCurrentLanguage() {
+        return getInstance().CurrentLanguage;
+    }
+    private static Translator getInstance() {
+        if (instance==null)
+            new Translator().init();
+        return instance;
     }
 
-    private static Translator instance=null;
-    private static Map<String,File> FileMap;
-    private static Map<String,String> LanguageMap;
-    private static State STATE=State.Default;
-    private String currentCode;
-    public static final String DefaultCode="en_US";
     public Translator(){
-        instance=this;
-        if (ListenerList==null)
-            ListenerList=new ArrayList<TranslatorLoadedListener>();
-        LanguageMap=new HashMap<String, String>();
-        FileMap=new HashMap<String, File>();
-        STATE=State.Default;
-        loadFiles();
-        currentCode=getCode();
-        load();
-    }
-
-    private void loadFiles() {
-        File langFile=new File(Reference.ResourceFile,"lang");
-        if (langFile.exists()){
-            File[] files=langFile.listFiles();
-            for (File entry:files){
-                if (!entry.isDirectory()) {
-                    String code = searchFile(entry, Keys.Translator.LanguageCode);
-                    if (code == null) {
-                        String name = entry.getName();
-                        if (name.contains("."))
-                            name = name.substring(0, name.indexOf("."));
-                        code = name;
-                    }
-                    if (FileMap.containsKey(code))
-                        LogHelper.warn(Keys.Log.LangFileExistWarn,code);
-                    FileMap.put(code, entry);
-                }
-            }
-        }
-    }
-    private String getCode(){
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-            return Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
-        else{
-            String code=DefaultCode;
-            String folder;
-            Boolean ready=false;
-            File configFolder;
-            for (Map.Entry<String,File> entry:FileMap.entrySet()){
-                folder=searchFile(entry.getValue(),Keys.Config.ConfigFolder);
-                if (folder!=null){
-                    configFolder=new File(Reference.getConfigDirectory(),folder);
-                    if (configFolder.isDirectory()&&configFolder.exists()){
-                        if (!ready){
-                            ready=true;
-                            code=entry.getKey();
-                        }
-                        else
-                        {
-                            if (!configFolder.delete())
-                                LogHelper.warn(Keys.Log.FileCanNotDeleteWarn,configFolder.getName());
-                        }
-                    }
-                }
-            }
-            return code;
-        }
-    }
-    @Override
-    public void load(){
-        Boolean isreload=isReady();
-        loadCommon();
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-            loadClient();
-        else
-            loadServer();
-        for (TranslatorLoadedListener entry:ListenerList){
-            entry.onTranslatorLoaded();
-        }
-        if (!isreload)
-            LogHelper.info(Keys.Log.TranslatorLoadedInfo,FMLCommonHandler.instance().getEffectiveSide().toString());
-        else
-            LogHelper.info(Keys.Log.TranslatorReloadedInfo);
-        setReady();
-    }
-
-    private String searchFile(File entry, String languageCode) {
-        try {
-            BufferedReader reader=new BufferedReader(new FileReader(entry));
-            String KEY;
-            String VALUE;
-            for (String textLine=reader.readLine();textLine!=null;textLine=reader.readLine()){
-                KEY=getKey(textLine);
-                VALUE=getValue(textLine);
-                if (KEY!=null&&KEY.equals(languageCode))
-                    return VALUE;
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    @Override
-    public void loadCommon() {
-        if (!FileMap.containsKey(currentCode))
-            currentCode=DefaultCode;
-    }
-    @Override
-    public void loadClient() {
-
-    }
-    @Override
-    public void loadServer() {
-        Map<String,String> tempMap=new HashMap<String, String>();
-        if (FileMap.containsKey(DefaultCode))
-            tempMap=readMap(FileMap.get(DefaultCode));
-        if ((!currentCode.equals(DefaultCode))&&FileMap.containsKey(currentCode))
-            tempMap=replaceMap(tempMap,readMap(FileMap.get(currentCode)));
-        LanguageMap=tempMap;
-    }
-
-    private Map<String,String> replaceMap(Map<String, String> tempMap, Map<String, String> map) {
-        for (Map.Entry<String,String> entry:map.entrySet()){
-            tempMap.put(entry.getKey(),entry.getValue());
-        }
-        return tempMap;
-    }
-    private Map<String,String> readMap(File file) {
-        Map<String,String> tempMap=new HashMap<String, String>();
-        try {
-            BufferedReader reader=new BufferedReader(new FileReader(file));
-            String KEY;
-            String VALUE;
-            for (String textLine =reader.readLine();textLine!=null;textLine=reader.readLine()){
-                KEY=getKey(textLine);
-                VALUE=getValue(textLine);
-                if (KEY!=null&VALUE!=null){
-                    tempMap.put(KEY,VALUE);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return tempMap;
-    }
-
-    private String getValue(String textLine) {
-        if (textLine.contains("=")&&textLine.indexOf("=")<textLine.length()-2){
-            return textLine.substring(textLine.indexOf("=")+1);
-        }
-        return null;
-    }
-    private String getKey(String textLine) {
-        if (textLine.contains("=")&&textLine.indexOf("=")>0){
-            return textLine.substring(0,textLine.indexOf("="));
-        }
-        return null;
-    }
-
-    public static void registerListener(TranslatorLoadedListener listener){
         if (instance==null)
-            ListenerList=new ArrayList<TranslatorLoadedListener>();
-        ListenerList.add(listener);
+            instance=this;
+        stage=Stage.New;
+        instance.side= FMLCommonHandler.instance().getEffectiveSide();
+        LogHelper.info(true,"Setting translator on "+instance.side.toString()+" side.");
     }
-    public enum State{
-        Translated,NotTranslated,PartlyTranslated,Default,Error;
+    public void init(){
+        stage=Stage.Initializing;
+        LogHelper.info(true,"Initiating translator.");
+       instance.CurrentLanguage=getLanguage();
+        if (!stage.equals(Stage.Error))
+            load();
+        else LogHelper.error(true,"Failed to set language!Unable to load translator!");
+    }
+
+    private String getLanguage() {
+        LogHelper.info(true,"Setting language.");
+        if (getInstance().side.isClient())
+            return Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
+        else
+            return getConfigLanguage();
+    }
+    private void load() {
+        stage=Stage.Loading;
+        LogHelper.info(true,"Loading Translator.");
+        if (getInstance().side!=null) {
+            if (getInstance().side.isClient())
+                loadClient();
+            else
+                loadServer();
+        }
+        else {
+            LogHelper.error(true,"Unknown Error! Failed to load translator!");
+            stage=Stage.Error;
+        }
+    }
+
+    @SideOnly(Side.SERVER)
+    private String getConfigLanguage() {
+        getInstance().FileMap=getFileMap();
+        if (!stage.equals(Stage.Error)) {
+            LogHelper.info(true,"Searching config files");
+            File[] files = FileHelper.list(Reference.ConfigFolder);
+            if (files == null){
+                LogHelper.warn(true,"No config file found!Will set to default language.");
+                return DefaultLanguage;
+            }
+            else {
+                Map<String,String> KeyMap=new HashMap<String, String>();
+                Boolean injected=false;
+                String code=DefaultLanguage;
+                LogHelper.info(true,"Reading valid config folder.");
+                for (Map.Entry<String,File> entry:getInstance().FileMap.entrySet()){
+                    String value=searchValue(entry.getValue(), Lang.Config.Holder);
+                    if (value!=null) {
+                        KeyMap.put(value, entry.getKey());
+                    }
+                }
+                LogHelper.info(true,"Matching config files and Language.");
+                for (File entry:files){
+                    if (KeyMap.containsKey(entry.getName()))
+                    {
+                        LogHelper.info(true,"File %s is valid.",entry.getName());
+                        if (!injected){
+                            injected=true;
+                            code=KeyMap.get(entry.getName());
+                            LogHelper.info(true,"Language confirmed.Removing extra config files.");
+                        }
+                        else {
+                            LogHelper.info(true,"Removing file %s.",entry.getName());
+                            FileHelper.delete(entry);
+                        }
+                    }
+                    else LogHelper.info(true,"File %s is not a config folder of this mod.",entry.getName());
+                }
+                if (injected)
+                    LogHelper.info(true,"Files removed.Language code is %s.",code);
+                else
+                    LogHelper.info(true,"Not valid file found. Code will be set to Default.");
+                return code;
+            }
+        }
+        else{
+            LogHelper.error(true,"Unavailable language folder!");
+            return DefaultLanguage;
+        }
+    }
+    @SideOnly(Side.CLIENT)
+    private void loadClient(){
+        stage=Stage.Ready;
+        LogHelper.info(Log.Info.TranslatorLoaded,getInstance().side.toString());
+        MinecraftForge.EVENT_BUS.post(new TranslatorLoadedEvent());
+    }
+    @SideOnly(Side.SERVER)
+    private void loadServer(){
+        getInstance().LangMap=new HashMap<String, String>();
+        injectLang(DefaultLanguage);
+        if (!getInstance().CurrentLanguage.equals(DefaultLanguage)){
+            if (!getInstance().FileMap.containsKey(getInstance().CurrentLanguage))
+                getInstance().CurrentLanguage=DefaultLanguage;
+            else
+                injectLang(getInstance().CurrentLanguage);
+        }
+        if (!stage.equals(Stage.Warn))
+            stage=Stage.Ready;
+        if (stage.isReady())
+            LogHelper.info(Log.Info.TranslatorLoaded,getInstance().side.toString());
+        else
+            LogHelper.warn(Log.Warn.TranslatorLoaded,getInstance().side.toString());
+        MinecraftForge.EVENT_BUS.post(new TranslatorLoadedEvent());
+    }
+
+    @SideOnly(Side.SERVER)
+    private Map<String,File> getFileMap() {
+        LogHelper.info(true,"Searching language files.");
+        Map<String,File> fileMap=new HashMap<String, File>();
+        File langHolder=new File(Translator.class.getResource("/assets/"+Reference.ID+"/lang").getFile());
+        File[] files=FileHelper.list(langHolder);
+        if (files!=null){
+            for (File processing:files){
+                String code=getCode(processing);
+                if (code!=null)
+                    fileMap.put(code,processing);
+            }
+            LogHelper.info(true,"Language files loaded.");
+        }
+        else
+        {
+            LogHelper.warn(true,"No language file is found!");
+        }
+        return fileMap;
+    }
+    @SideOnly(Side.SERVER)
+    private String searchValue(File file,String key){
+        LogHelper.info(true,"Searching key %s in file %s.",key,file.getName());
+        Map<String,String> lang=FileHelper.readMap(file);
+        if (lang.containsKey(key)){
+            LogHelper.info(true,"Key %s found.Value is %s.",key,lang.get(key));
+            return lang.get(key);
+        }
+        LogHelper.info(true,"Key %s not found.",key);
+        return null;
+    }
+    @SideOnly(Side.SERVER)
+    private void injectLang(String codeIn){
+        LogHelper.info(true,"Injecting language %s.",codeIn);
+        if (!getInstance().FileMap.containsKey(codeIn)){
+            LogHelper.warn(true,"Code unavailable.Set to default.");
+            codeIn=DefaultLanguage;
+        }
+        if (!getInstance().FileMap.containsKey(codeIn)) {
+            LogHelper.error(true,"File not found! Language map could be empty!");
+            if (getInstance().LangMap==null)
+                getInstance().LangMap = new HashMap<String, String>();
+        }
+        else {
+            Map<String,String> map=FileHelper.readMap(getInstance().FileMap.get(codeIn));
+            for (Map.Entry<String,String> entry:map.entrySet()){
+                getInstance().LangMap.put(entry.getKey(),entry.getValue());
+            }
+            LogHelper.info(true,"Injection complete.");
+        }
+    }
+    @SideOnly(Side.SERVER)
+    private String getCode(File fileIn){
+        Map<String,String> map=FileHelper.readMap(fileIn);
+        String code;
+        if (map.containsKey(Lang.CodeKey))
+            code=map.get(Lang.CodeKey);
+        else if (map.containsKey(Lang.NameKey))
+            code=map.get(Lang.NameKey);
+        else {
+            String name=fileIn.getName();
+            if (name.endsWith(FileEnd))
+                code=name.substring(0,name.indexOf(FileEnd));
+            else {
+                LogHelper.warn(true,"No code found in file %s.",fileIn.getName());
+                return null;
+            }
+        }
+        LogHelper.info(true,"Code %s found in file %s.",code,fileIn.getName());
+        return code;
+    }
+
+    @SubscribeEvent
+    public static void onLanguageChangedEvent(LanguageChangedEvent event){
+        LogHelper.info(Log.Info.TranslatorLanguageChangedEvent,event.getCurrentCode());
+        getInstance().CurrentLanguage=event.getCurrentCode();
+        getInstance().load();
+    }
+
+    public enum Results{
+        Null,NotTranslated,Translated;
         public Boolean isTranslated(){
             return this.equals(Translated);
         }
     }
-    private static List<TranslatorLoadedListener> ListenerList=null;
-    @SubscribeEvent
-    public static void onLanguageChangedEvent(LanguageChangedEvent event){
-        instance.currentCode=event.getCurrentCode();
-        instance.load();
-    }
-
 }

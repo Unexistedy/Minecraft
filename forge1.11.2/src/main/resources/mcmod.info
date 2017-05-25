@@ -12,19 +12,5 @@
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
-},
-{
-  "modid": "element",
-  "name": "元素",
-  "description": "开发中...",
-  "version": "0.1",
-  "mcversion": "1.10.2",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["Unexistedy"],
-  "credits": "QvQ",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
 }
 ]

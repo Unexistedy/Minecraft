@@ -1,47 +1,37 @@
 package com.unexistedy.element.mod.reference;
 
-import com.unexistedy.element.mod.common.event.listener.TranslatorLoadedListener;
+import com.unexistedy.element.mod.proxy.common.events.events.TranslatorLoadedEvent;
 import com.unexistedy.element.mod.utility.Translator;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-public class Reference implements TranslatorLoadedListener {
-    private static Reference instance;
-    public Reference(FMLPreInitializationEvent event){
-        instance=this;
-        SourceFile=event.getSourceFile();
-        ConfigDirectory=event.getModConfigurationDirectory();
-        Name=event.getModMetadata().name;
-        Translator.registerListener(instance);
-    }
+@Mod.EventBusSubscriber
+public class Reference {
     public static final String ID="element";
     public static String Name=ID;
     public static final String ClientProxy="com.unexistedy.element.mod.proxy.ClientProxy";
-    public static final String ServerClient="com.unexistedy.element.mod.proxy.ServerProxy";
-    public static final String GuiFactory="com.unexistedy.element.mod.client.gui.GuiFactory";
-    private final File SourceFile;
-    private final File ConfigDirectory;
-    public static final File ResourceFile=new File(Reference.class.getResource("/assets/"+ID).getFile());
+    public static final String ServerProxy="com.unexistedy.element.mod.proxy.ServerProxy";
+    public static final String GuiFactory="";
 
-    public static File getConfigDirectory() {
-        return getInstance().ConfigDirectory;
+    public static File ConfigFolder;
+    public static File SourceFolder;
+    public static Logger DefaultLogger;
+
+    public Reference(FMLPreInitializationEvent event){
+        Name=event.getModMetadata().name;
+        ConfigFolder=event.getModConfigurationDirectory();
+        SourceFolder=event.getSourceFile();
+        DefaultLogger=event.getModLog();
     }
-
-    public static File getSourceFile() {
-        return getInstance().SourceFile;
-    }
-
-    public static Reference getInstance() {
-        return instance;
-    }
-
-    @Override
-    public void onTranslatorLoaded() {
-        String temp=Translator.get(Keys.Name);
-        if (Translator.getSTATE().isTranslated())
-            Name=temp;
-        else
-            Name=ID;
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onTranslatorLoadedEvent(TranslatorLoadedEvent event){
+        String name= Translator.get(Lang.Name);
+        if (Translator.getResults().isTranslated())
+            Name=name;
     }
 }
