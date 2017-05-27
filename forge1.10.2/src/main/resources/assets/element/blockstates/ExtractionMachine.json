@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=down":  { "model": "element:ExtractionMachine", "x": 180 },
+    "facing=up":    { "model": "element:ExtractionMachine" },
+    "facing=north": { "model": "element:ExtractionMachine" },
+    "facing=south": { "model": "element:ExtractionMachine", "y": 180 },
+    "facing=west":  { "model": "element:ExtractionMachine", "y": 270 },
+    "facing=east":  { "model": "element:ExtractionMachine", "y": 90 }
+  }
+}

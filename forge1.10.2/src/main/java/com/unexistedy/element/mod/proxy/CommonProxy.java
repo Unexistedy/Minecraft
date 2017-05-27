@@ -1,5 +1,8 @@
 package com.unexistedy.element.mod.proxy;
 
+import com.unexistedy.element.mod.proxy.client.gui.GuiHandler;
+import com.unexistedy.element.mod.proxy.common.components.blocks.BlockHandler;
+import com.unexistedy.element.mod.proxy.common.components.items.ItemHandler;
 import com.unexistedy.element.mod.proxy.common.configuration.ConfigHandler;
 import com.unexistedy.element.mod.proxy.common.events.EventHandler;
 import com.unexistedy.element.mod.utility.LogHelper;
@@ -18,7 +21,10 @@ public class CommonProxy implements IProxy {
 
     @Override
     public void initialize(FMLInitializationEvent event) {
+        new ItemHandler().interact();
+        new BlockHandler().interact();
         new EventHandler().init();
+        new GuiHandler().load(event);
     }
 
     @Override

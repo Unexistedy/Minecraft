@@ -1,0 +1,44 @@
+{
+  "parent":"item/generated",
+  "textures": {
+    "layer0":"element:items/ElementCrystal_4"
+  },
+  "overrides":[
+    {
+      "predicate":{
+        "meta":0
+      },
+      "model":"element:item/ElementCrystal_0"
+    },
+    {
+      "predicate":{
+        "meta":1
+      },
+      "model":"element:item/ElementCrystal_1"
+    },
+    {
+      "predicate":{
+        "meta":2
+      },
+      "model":"element:item/ElementCrystal_2"
+    },
+    {
+      "predicate":{
+        "meta":3
+      },
+      "model":"element:item/ElementCrystal_3"
+    },
+    {
+      "predicate":{
+        "meta":4
+      },
+      "model":"element:item/ElementCrystal_4"
+    },
+    {
+      "predicate":{
+        "meta":5
+      },
+      "model":"element:item/ElementCrystal_5"
+    }
+  ]
+}

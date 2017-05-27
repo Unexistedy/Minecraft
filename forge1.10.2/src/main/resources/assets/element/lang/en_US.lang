@@ -10,6 +10,15 @@ element.config.system.category.language=Basic Setting
 element.config.system.name.language=System Language
 element.config.system.comment.language=Language setting for logger on server side.
 
+element.item.ElementCrystal.darkness.name=Dark Crystal
+element.item.ElementCrystal.metal.name=Metal Crystal
+element.item.ElementCrystal.wood.name=Wood Crystal
+element.item.ElementCrystal.liquid.name=Water Crystal
+element.item.ElementCrystal.fire.name=Fire Crystal
+element.item.ElementCrystal.ground.name=Ground Crystal
+
+element.tile.ExtractionMachine.name=Extraction machine
+
 element.log.info.setLogger=Setting logger to Logger[%s].
 element.log.info.translatorLoaded=Translator loaded on %s side.
 element.log.info.translatorLanguageChangedEvent=Language changed! Language code will be set to %s.
@@ -25,3 +34,5 @@ element.log.info.configHandlerReloading=Reloading ConfigHandler.
 element.log.info.configHandlerReloaded=ConfigHandler reload complete.
 
 element.log.warn.translatorLoaded=Translator is not correctly loaded on %s side.
+
+itemGroup.element.name=Element

@@ -34,8 +34,12 @@ public class LogHelper {
             new LogHelper();
         if (key!=null)
         {
-            if (force)
-                logger.log(level,String.format(key,parameters));
+            if (force){
+                String message=String.format(key,parameters);
+                if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+                    message="["+Reference.Name+"]:"+message;
+                logger.log(level,message);
+            }
             else
             {
                 String translate=Translator.get(key, parameters);

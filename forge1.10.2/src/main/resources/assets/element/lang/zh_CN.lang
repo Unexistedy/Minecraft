@@ -10,6 +10,15 @@ element.config.system.category.language=基础设置
 element.config.system.name.language=系统语言
 element.config.system.comment.language=用于服务端日志的语言设置.
 
+element.item.ElementCrystal.darkness.name=暗结晶
+element.item.ElementCrystal.metal.name=金结晶
+element.item.ElementCrystal.wood.name=木结晶
+element.item.ElementCrystal.liquid.name=水结晶
+element.item.ElementCrystal.fire.name=火结晶
+element.item.ElementCrystal.ground.name=土结晶
+
+element.tile.ExtractionMachine.name=提取机
+
 element.log.info.setLogger=设置日志为 Logger[%s].
 element.log.info.translatorLoaded=翻译器已在 %s 端加载.
 element.log.info.translatorLanguageChangedEvent=语言被更改!语言代码将设置为 %s.
@@ -25,3 +34,5 @@ element.log.info.configHandlerReloading=正在重载配置文件管理器.
 element.log.info.configHandlerReloaded=配置文件管理器已重载.
 
 element.log.warn.translatorLoaded=翻译器未能正确在 %s 端加载.
+
+itemGroup.element.name=元素
